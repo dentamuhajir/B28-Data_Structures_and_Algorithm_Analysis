@@ -1,20 +1,20 @@
+//  javac .\SimpleDatabase.java
 import java.util.Scanner;
 
 public class SimpleDatabase {
     public static void main(String[] args) {
-        
         Scanner scanner = new Scanner(System.in);
-
         int totalData;
-        
+
+        // Validasi input jumlah mahasiswa (maksimal 5)
         while (true) {
-            System.out.print("Enter the number of students to input: ");
+            System.out.print("Masukkan jumlah mahasiswa yang ingin diinput: ");
             totalData = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
             if (totalData > 0 && totalData < 6) {
                 break;
             }
-            System.out.println("Maximum input data of students is 5");
+            System.out.println("Jumlah input data mahasiswa maksimal 5");
         }
 
         long nim;
@@ -22,52 +22,56 @@ public class SimpleDatabase {
         String major;
 
         StudentLinkedList studentList = new StudentLinkedList();
-        
+
         for (int i = 1; i <= totalData; i++) {
-            System.out.println("-----------------------------------------------");
-            
+            System.out.println("------------------------------------------------");
+
+            // Validasi input NIM
             while (true) {
-                System.out.print("Enter student ID (NIM) for student " + i + ": ");
+                System.out.print("Masukkan NIM mahasiswa ke-" + i + ": ");
                 String nimInput = scanner.nextLine();
-                if(nimInput.length() < 10) {
+                if (nimInput.length() < 10) {
                     nim = Long.parseLong(nimInput);
                     break;
                 } else {
-                    System.out.println("(info) Max input NIM is 10 character");
+                    System.out.println("(info) Maksimal NIM adalah 10 Digit");
                 }
             }
-            
+
+            // Validasi input nama
             while (true) {
-                System.out.print("Enter name for student " + i + ": ");
+                System.out.print("Masukkan nama mahasiswa ke-" + i + ": ");
                 name = scanner.nextLine();
-                if(name.length() < 30) {
+                if (name.length() < 30) {
                     break;
                 } else {
-                    System.out.println("(info) Max input name is 30 character");
+                    System.out.println("(info) Maksimal nama adalah 30 karakter");
                 }
             }
 
+            // Validasi input jurusan
             while (true) {
-                System.out.print("Enter major for student " + i + ": ");
+                System.out.print("Masukkan jurusan mahasiswa ke-" + i + ": ");
                 major = scanner.nextLine();
-            
-                if(major.length() < 50) {
+                if (major.length() < 50) {
                     break;
                 } else {
-                    System.out.println("(info) Max input major is 10 character");
+                    System.out.println("(info) Maksimal jurusan adalah 50 karakter");
                 }
             }
 
+            // Tambahkan ke linked list
             studentList.add(nim, name, major);
         }
 
         scanner.close();
 
-        studentList.sortList();
-        studentList.printList();               
+        studentList.sortList();  // Urutkan berdasarkan NIM
+        studentList.printList(); // Tampilkan data mahasiswa
     }
 }
 
+// Node untuk menyimpan data mahasiswa
 class StudentNode {
     long id;
     String name;
@@ -82,12 +86,14 @@ class StudentNode {
     }
 }
 
+// Struktur data single linked list
 class StudentLinkedList {
     StudentNode head;
 
+    // Tambah data ke linked list
     void add(long id, String name, String major) {
         StudentNode newStudentNode = new StudentNode(id, name, major);
-        if(head == null) {
+        if (head == null) {
             head = newStudentNode;
         } else {
             StudentNode current = head;
@@ -97,7 +103,8 @@ class StudentLinkedList {
             current.next = newStudentNode;
         }
     }
- 
+
+    // Mengurutkan data berdasarkan NIM (selection sort)
     public void sortList() {
         StudentNode current = head;
 
@@ -112,6 +119,7 @@ class StudentLinkedList {
                 index = index.next;
             }
 
+            // Tukar data antar node
             long tempId = current.id;
             current.id = min.id;
             min.id = tempId;
@@ -123,18 +131,19 @@ class StudentLinkedList {
             String tempMajor = current.major;
             current.major = min.major;
             min.major = tempMajor;
- 
+
             current = current.next;
         }
     }
 
+    // Menampilkan seluruh isi linked list
     void printList() {
         StudentNode current = head;
         int no = 1;
 
-        System.out.println("---------------------------------------------------------------");
-        System.out.printf("%-5s %-10s %-30s %-50s\n", "No", "NIM", "Name", "Major");
-        System.out.println("---------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("%-5s %-10s %-30s %-50s\n", "No", "NIM", "Nama", "Jurusan");
+        System.out.println("--------------------------------------------------------------------------");
 
         while (current != null) {
             System.out.printf("%-5d %-10d %-30s %-50s\n", no, current.id, current.name, current.major);
@@ -142,6 +151,6 @@ class StudentLinkedList {
             no++;
         }
 
-        System.out.println("---------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------");
     }
 }
